@@ -3,6 +3,8 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * Pool
@@ -28,6 +30,16 @@ class Pool
      */
     private $name;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Vm", mappedBy="pool")
+     */
+
+    private $vmsPool;
+
+    public function __construct()
+    {
+        $this->vmsPool = new ArrayCollection();
+    }
 
     /**
      * Get id.

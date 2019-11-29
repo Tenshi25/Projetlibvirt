@@ -84,6 +84,45 @@ class Vm
     private $user;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Pool", inversedBy="vmsPool")
+     * @ORM\JoinColumn(name="pool_id", referencedColumnName="id")
+     */
+    private $pool;
+
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+    public function setPool($pool)
+    {
+        $this->pool = $pool;
+
+        return $this;
+    }
+
+    /**
+     * Get id.
+     *
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+    
+    /**
+     * Get id.
+     *
+     * @return Pool
+     */
+    public function getPool()
+    {
+        return $this->pool;
+    }
+
+    /**
      * Get id.
      *
      * @return int
@@ -284,4 +323,5 @@ class Vm
     {
         return $this->currentharddisk;
     }
+
 }

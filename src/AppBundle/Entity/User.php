@@ -3,6 +3,8 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * User
@@ -49,8 +51,9 @@ class User
 
     public function __construct()
     {
-        $this->products = new ArrayCollection();
+        $this->vms = new ArrayCollection();
     }
+    
 
     /**
      * Get id.
