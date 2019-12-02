@@ -101,7 +101,7 @@ class VmController extends Controller
     /**
      * Deletes a vm entity.
      *
-     * @Route("/{id}", name="vm_delete")
+     * @Route("/{id}/delete", name="vm_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, Vm $vm)

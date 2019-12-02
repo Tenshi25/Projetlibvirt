@@ -101,7 +101,7 @@ class PoolController extends Controller
     /**
      * Deletes a pool entity.
      *
-     * @Route("/{id}", name="pool_delete")
+     * @Route("/{id}/delete", name="pool_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, Pool $pool)

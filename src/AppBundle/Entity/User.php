@@ -36,11 +36,10 @@ class User
      * @ORM\Column(name="password", type="string", length=255)
      */
     private $password;
-
+    
     /**
-     * @var string
-     *
-     * @ORM\Column(name="role", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="Role", inversedBy="users")
+     * @ORM\JoinColumn(name="role_id", referencedColumnName="id")
      */
     private $role;
 

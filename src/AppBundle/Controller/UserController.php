@@ -45,6 +45,7 @@ class UserController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $user->setPassword(hash('md5', $user->getPassword()));
             $em->persist($user);
             $em->flush();
 
@@ -86,6 +87,7 @@ class UserController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $user->setPassword(hash('md5', $user->getPassword()));
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('user_edit', array('id' => $user->getId()));
@@ -101,7 +103,7 @@ class UserController extends Controller
     /**
      * Deletes a user entity.
      *
-     * @Route("/{id}", name="user_delete")
+     * @Route("/{id}/delete", name="user_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, User $user)
