@@ -7,12 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 /**
- * Pool
+ * Role
  *
- * @ORM\Table(name="pool")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PoolRepository")
+ * @ORM\Table(name="role")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\RoleRepository")
  */
-class Pool
+class Role
 {
     /**
      * @var int
@@ -26,19 +26,18 @@ class Pool
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, unique=true)
      */
     private $name;
-
+    
     /**
-     * @ORM\OneToMany(targetEntity="Vm", mappedBy="pool")
+     * @ORM\OneToMany(targetEntity="User", mappedBy="role")
      */
-
-    private $vmsPool;
+    private $users;
 
     public function __construct()
     {
-        $this->vmsPool = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     /**
@@ -56,7 +55,7 @@ class Pool
      *
      * @param string $name
      *
-     * @return Pool
+     * @return Role
      */
     public function setName($name)
     {

@@ -3,6 +3,8 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * User
@@ -34,11 +36,10 @@ class User
      * @ORM\Column(name="password", type="string", length=255)
      */
     private $password;
-
+    
     /**
-     * @var string
-     *
-     * @ORM\Column(name="role", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="Role", inversedBy="users")
+     * @ORM\JoinColumn(name="role_id", referencedColumnName="id")
      */
     private $role;
 
@@ -49,8 +50,9 @@ class User
 
     public function __construct()
     {
-        $this->products = new ArrayCollection();
+        $this->vms = new ArrayCollection();
     }
+    
 
     /**
      * Get id.
