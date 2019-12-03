@@ -22,13 +22,21 @@ class VmController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        if(isset ($_SESSION["role"])){
+            $user = $_SESSION["user"];
+            $userRole = $_SESSION["role"];
 
-        $vms = $em->getRepository('AppBundle:Vm')->findAll();
+            if ($userRole == "Admin" or $userRole == "User" ){
+                $em = $this->getDoctrine()->getManager();
 
-        return $this->render('vm/index.html.twig', array(
-            'vms' => $vms,
-        ));
+                $vms = $em->getRepository('AppBundle:Vm')->findAll();
+
+                return $this->render('vm/index.html.twig', array(
+                    'vms' => $vms,
+                    'role' => $userRole,
+                ));
+            }
+        }
     }
 
     /**
@@ -39,22 +47,30 @@ class VmController extends Controller
      */
     public function newAction(Request $request)
     {
-        $vm = new Vm();
-        $form = $this->createForm('AppBundle\Form\VmType', $vm);
-        $form->handleRequest($request);
+        if(isset ($_SESSION["role"])){
+            $user = $_SESSION["user"];
+            $userRole = $_SESSION["role"];
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($vm);
-            $em->flush();
+            if ($userRole == "Admin" or $userRole == "User" ){
+                $vm = new Vm();
+                $form = $this->createForm('AppBundle\Form\VmType', $vm);
+                $form->handleRequest($request);
 
-            return $this->redirectToRoute('vm_show', array('id' => $vm->getId()));
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($vm);
+                    $em->flush();
+
+                    return $this->redirectToRoute('vm_show', array('id' => $vm->getId()));
+                }
+
+                return $this->render('vm/new.html.twig', array(
+                    'vm' => $vm,
+                    'role' => $userRole,
+                    'form' => $form->createView(),
+                ));
+            }
         }
-
-        return $this->render('vm/new.html.twig', array(
-            'vm' => $vm,
-            'form' => $form->createView(),
-        ));
     }
 
     /**
@@ -65,12 +81,20 @@ class VmController extends Controller
      */
     public function showAction(Vm $vm)
     {
-        $deleteForm = $this->createDeleteForm($vm);
+        if(isset ($_SESSION["role"])){
+            $user = $_SESSION["user"];
+            $userRole = $_SESSION["role"];
 
-        return $this->render('vm/show.html.twig', array(
-            'vm' => $vm,
-            'delete_form' => $deleteForm->createView(),
-        ));
+            if ($userRole == "Admin" or $userRole == "User" ){
+                $deleteForm = $this->createDeleteForm($vm);
+
+                return $this->render('vm/show.html.twig', array(
+                    'vm' => $vm,
+                    'role' => $userRole,
+                    'delete_form' => $deleteForm->createView(),
+                ));
+            }
+        }
     }
 
     /**
@@ -81,21 +105,29 @@ class VmController extends Controller
      */
     public function editAction(Request $request, Vm $vm)
     {
-        $deleteForm = $this->createDeleteForm($vm);
-        $editForm = $this->createForm('AppBundle\Form\VmType', $vm);
-        $editForm->handleRequest($request);
+        if(isset ($_SESSION["role"])){
+            $user = $_SESSION["user"];
+            $userRole = $_SESSION["role"];
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            if ($userRole == "Admin" or $userRole == "User" ){
+                $deleteForm = $this->createDeleteForm($vm);
+                $editForm = $this->createForm('AppBundle\Form\VmType', $vm);
+                $editForm->handleRequest($request);
 
-            return $this->redirectToRoute('vm_edit', array('id' => $vm->getId()));
+                if ($editForm->isSubmitted() && $editForm->isValid()) {
+                    $this->getDoctrine()->getManager()->flush();
+
+                    return $this->redirectToRoute('vm_edit', array('id' => $vm->getId()));
+                }
+
+                return $this->render('vm/edit.html.twig', array(
+                    'vm' => $vm,
+                    'role' => $userRole,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));
+            }
         }
-
-        return $this->render('vm/edit.html.twig', array(
-            'vm' => $vm,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
     }
 
     /**
@@ -106,16 +138,23 @@ class VmController extends Controller
      */
     public function deleteAction(Request $request, Vm $vm)
     {
-        $form = $this->createDeleteForm($vm);
-        $form->handleRequest($request);
+        if(isset ($_SESSION["role"])){
+            $user = $_SESSION["user"];
+            $userRole = $_SESSION["role"];
+  
+            if ($userRole == "Admin" or $userRole == "User" ){
+                $form = $this->createDeleteForm($vm);
+                $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($vm);
-            $em->flush();
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $em = $this->getDoctrine()->getManager();
+                    $em->remove($vm);
+                    $em->flush();
+                }
+
+                return $this->redirectToRoute('vm_index');
+            }
         }
-
-        return $this->redirectToRoute('vm_index');
     }
 
     /**

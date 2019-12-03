@@ -22,13 +22,27 @@ class RoleController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        if(isset ($_SESSION["role"])){
+            $user = $_SESSION["user"];
+            $userRole = $_SESSION["role"];
 
-        $roles = $em->getRepository('AppBundle:Role')->findAll();
+            if ($userRole == "Admin" ){
+                $em = $this->getDoctrine()->getManager();
 
-        return $this->render('role/index.html.twig', array(
-            'roles' => $roles,
-        ));
+                $roles = $em->getRepository('AppBundle:Role')->findAll();
+
+                return $this->render('role/index.html.twig', array(
+                    'roles' => $roles,
+                    'role' => $userRole,
+                ));
+            }else{
+                return $this->redirectToRoute('home');
+            }
+
+
+        }else{
+            return $this->redirectToRoute('login');
+        }
     }
 
     /**
@@ -39,22 +53,36 @@ class RoleController extends Controller
      */
     public function newAction(Request $request)
     {
-        $role = new Role();
-        $form = $this->createForm('AppBundle\Form\RoleType', $role);
-        $form->handleRequest($request);
+        if(isset ($_SESSION["role"])){
+            $user = $_SESSION["user"];
+            $userRole = $_SESSION["role"];
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($role);
-            $em->flush();
+            if ($userRole == "Admin"){
+                $role = new Role();
+                $form = $this->createForm('AppBundle\Form\RoleType', $role);
+                $form->handleRequest($request);
 
-            return $this->redirectToRoute('role_show', array('id' => $role->getId()));
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($role);
+                    $em->flush();
+
+                    return $this->redirectToRoute('role_show', array('id' => $role->getId()));
+                }
+
+                return $this->render('role/new.html.twig', array(
+                    'roleN' => $role,
+                    'role' => $userRole,
+                    'form' => $form->createView(),
+                ));
+            }else{
+                return $this->redirectToRoute('home');
+            }
+
+
+        }else{
+            return $this->redirectToRoute('login');
         }
-
-        return $this->render('role/new.html.twig', array(
-            'role' => $role,
-            'form' => $form->createView(),
-        ));
     }
 
     /**
@@ -65,12 +93,26 @@ class RoleController extends Controller
      */
     public function showAction(Role $role)
     {
-        $deleteForm = $this->createDeleteForm($role);
+        if(isset ($_SESSION["role"])){
+            $user = $_SESSION["user"];
+            $userRole = $_SESSION["role"];
 
-        return $this->render('role/show.html.twig', array(
-            'role' => $role,
-            'delete_form' => $deleteForm->createView(),
-        ));
+            if ($userRole == "Admin" ){
+                $deleteForm = $this->createDeleteForm($role);
+
+                return $this->render('role/show.html.twig', array(
+                    'roleN' => $role,
+                    'role' => $userRole,
+                    'delete_form' => $deleteForm->createView(),
+                ));
+            }else{
+                return $this->redirectToRoute('home');
+            }
+
+
+        }else{
+            return $this->redirectToRoute('login');
+        }
     }
 
     /**
@@ -81,21 +123,35 @@ class RoleController extends Controller
      */
     public function editAction(Request $request, Role $role)
     {
-        $deleteForm = $this->createDeleteForm($role);
-        $editForm = $this->createForm('AppBundle\Form\RoleType', $role);
-        $editForm->handleRequest($request);
+        if(isset ($_SESSION["role"])){
+            $user = $_SESSION["user"];
+            $userRole = $_SESSION["role"];
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            if ($userRole == "Admin" ){
+                $deleteForm = $this->createDeleteForm($role);
+                $editForm = $this->createForm('AppBundle\Form\RoleType', $role);
+                $editForm->handleRequest($request);
 
-            return $this->redirectToRoute('role_edit', array('id' => $role->getId()));
+                if ($editForm->isSubmitted() && $editForm->isValid()) {
+                    $this->getDoctrine()->getManager()->flush();
+
+                    return $this->redirectToRoute('role_edit', array('id' => $role->getId()));
+                }
+
+                return $this->render('role/edit.html.twig', array(
+                    'roleN' => $role,
+                    'role' => $userRole,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));
+            }else{
+                return $this->redirectToRoute('home');
+            }
+
+
+        }else{
+            return $this->redirectToRoute('login');
         }
-
-        return $this->render('role/edit.html.twig', array(
-            'role' => $role,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
     }
 
     /**
@@ -106,16 +162,31 @@ class RoleController extends Controller
      */
     public function deleteAction(Request $request, Role $role)
     {
-        $form = $this->createDeleteForm($role);
-        $form->handleRequest($request);
+        if(isset ($_SESSION["role"])){
+            $user = $_SESSION["user"];
+            $userRole = $_SESSION["role"];
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($role);
-            $em->flush();
+            if ($userRole == "Admin" ){
+
+                $form = $this->createDeleteForm($role);
+                $form->handleRequest($request);
+
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $em = $this->getDoctrine()->getManager();
+                    $em->remove($role);
+                    $em->flush();
+                }
+                return $this->redirectToRoute('role_index');
+            }else{
+                return $this->redirectToRoute('home');
+            }
+
+
+        }else{
+            return $this->redirectToRoute('login');
         }
 
-        return $this->redirectToRoute('role_index');
+        
     }
 
     /**

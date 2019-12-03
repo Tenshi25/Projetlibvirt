@@ -5,9 +5,11 @@
 
   <div class="row">
     <div class="col-sm-12">
-    <h1>Vms list</h1>
-
-    <table>
+        <h1>home Page</h1>
+        <p>{{ user.login }}</p>
+        <p>{{ user.password }}</p>
+        <p>{{ role }}</p>
+        <table>
         <thead>
             <tr>
                 <th>Id</th>
@@ -48,12 +50,9 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('vm_new') }}">Create a new vm</a>
-        </li>
-    </ul>
     </div>
-</div>
+  </div>
+
+
+    
 {% endblock %}

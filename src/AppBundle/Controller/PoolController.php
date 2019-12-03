@@ -22,13 +22,26 @@ class PoolController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        if(isset ($_SESSION["role"])){
+            $user = $_SESSION["user"];
+            $userRole = $_SESSION["role"];
+            if ($userRole == "Admin" or $userRole == "User" ){
+                $em = $this->getDoctrine()->getManager();
 
-        $pools = $em->getRepository('AppBundle:Pool')->findAll();
+                $pools = $em->getRepository('AppBundle:Pool')->findAll();
 
-        return $this->render('pool/index.html.twig', array(
-            'pools' => $pools,
-        ));
+                return $this->render('pool/index.html.twig', array(
+                    'pools' => $pools,
+                    'role' => $userRole,
+                ));
+            }else{
+                return $this->redirectToRoute('login');
+            }
+
+
+        }else{
+            return $this->redirectToRoute('login');
+        }
     }
 
     /**
@@ -39,22 +52,35 @@ class PoolController extends Controller
      */
     public function newAction(Request $request)
     {
-        $pool = new Pool();
-        $form = $this->createForm('AppBundle\Form\PoolType', $pool);
-        $form->handleRequest($request);
+        if(isset ($_SESSION["role"])){
+            $user = $_SESSION["user"];
+            $userRole = $_SESSION["role"];
+            if ($userRole == "Admin" or $userRole == "User" ){
+                $pool = new Pool();
+                $form = $this->createForm('AppBundle\Form\PoolType', $pool);
+                $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($pool);
-            $em->flush();
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($pool);
+                    $em->flush();
 
-            return $this->redirectToRoute('pool_show', array('id' => $pool->getId()));
+                    return $this->redirectToRoute('pool_show', array('id' => $pool->getId()));
+                }
+
+                return $this->render('pool/new.html.twig', array(
+                    'pool' => $pool,
+                    'role' => $userRole,
+                    'form' => $form->createView(),
+                ));
+            }else{
+                return $this->redirectToRoute('login');
+            }
+
+
+        }else{
+            return $this->redirectToRoute('login');
         }
-
-        return $this->render('pool/new.html.twig', array(
-            'pool' => $pool,
-            'form' => $form->createView(),
-        ));
     }
 
     /**
@@ -65,12 +91,25 @@ class PoolController extends Controller
      */
     public function showAction(Pool $pool)
     {
-        $deleteForm = $this->createDeleteForm($pool);
+        if(isset ($_SESSION["role"])){
+            $user = $_SESSION["user"];
+            $userRole = $_SESSION["role"];
+            if ($userRole == "Admin" or $userRole == "User" ){
+                $deleteForm = $this->createDeleteForm($pool);
 
-        return $this->render('pool/show.html.twig', array(
-            'pool' => $pool,
-            'delete_form' => $deleteForm->createView(),
-        ));
+                return $this->render('pool/show.html.twig', array(
+                    'pool' => $pool,
+                    'role' => $userRole,
+                    'delete_form' => $deleteForm->createView(),
+                ));
+            }else{
+                return $this->redirectToRoute('login');
+            }
+
+
+        }else{
+            return $this->redirectToRoute('login');
+        }
     }
 
     /**
@@ -81,21 +120,35 @@ class PoolController extends Controller
      */
     public function editAction(Request $request, Pool $pool)
     {
-        $deleteForm = $this->createDeleteForm($pool);
-        $editForm = $this->createForm('AppBundle\Form\PoolType', $pool);
-        $editForm->handleRequest($request);
+        if(isset ($_SESSION["role"])){
+            $user = $_SESSION["user"];
+            $userRole = $_SESSION["role"];
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            if ($userRole == "Admin" or $userRole == "User" ){
+                $deleteForm = $this->createDeleteForm($pool);
+                $editForm = $this->createForm('AppBundle\Form\PoolType', $pool);
+                $editForm->handleRequest($request);
 
-            return $this->redirectToRoute('pool_edit', array('id' => $pool->getId()));
+                if ($editForm->isSubmitted() && $editForm->isValid()) {
+                    $this->getDoctrine()->getManager()->flush();
+
+                    return $this->redirectToRoute('pool_edit', array('id' => $pool->getId()));
+                }
+
+                return $this->render('pool/edit.html.twig', array(
+                    'pool' => $pool,
+                    'role' => $userRole,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));
+            }else{
+                return $this->redirectToRoute('login');
+            }
+
+
+        }else{
+            return $this->redirectToRoute('login');
         }
-
-        return $this->render('pool/edit.html.twig', array(
-            'pool' => $pool,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
     }
 
     /**
@@ -106,16 +159,23 @@ class PoolController extends Controller
      */
     public function deleteAction(Request $request, Pool $pool)
     {
-        $form = $this->createDeleteForm($pool);
-        $form->handleRequest($request);
+        if(isset ($_SESSION["role"])){
+            $user = $_SESSION["user"];
+            $userRole = $_SESSION["role"];
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($pool);
-            $em->flush();
+            if ($userRole == "Admin" or $userRole == "User" ){
+                $form = $this->createDeleteForm($pool);
+                $form->handleRequest($request);
+
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $em = $this->getDoctrine()->getManager();
+                    $em->remove($pool);
+                    $em->flush();
+                }
+
+                return $this->redirectToRoute('pool_index');
+            }
         }
-
-        return $this->redirectToRoute('pool_index');
     }
 
     /**
