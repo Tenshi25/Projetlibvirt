@@ -16,9 +16,10 @@ class VmType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name')->add('os')->add('nbcpu')->add('currentCpu')->add('currentRam')->add('maxRam')->add('harddisk')->add('currentharddisk')->add('user', EntityType::class, [
+        $builder->add('name')->add('os')->add('nbcpu')/*->add('currentCpu')->add('currentRam')*/->add('maxRam')->add('harddisk')
+        /*->add('currentharddisk')->add('user', EntityType::class, [
             'class' => User::class,
-            'choice_label' => 'login'])
+            'choice_label' => 'login'])*/
             ->add('pool', EntityType::class, [
                 'class' => Pool::class,
                 'choice_label' => 'name']);

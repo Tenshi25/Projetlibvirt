@@ -54,11 +54,11 @@ class UserController extends Controller
      */
     public function newAction(Request $request)
     {
-        if(isset ($_SESSION["role"])){
-            $user = $_SESSION["user"];
-            $userRole = $_SESSION["role"];
+        //if(isset ($_SESSION["role"])){
+            /*$user = $_SESSION["user"];
+            $userRole = $_SESSION["role"];*/
 
-            if ($userRole == "Admin" ){
+            //if ($userRole == "Admin" ){
                 $user = new User();
                 $form = $this->createForm('AppBundle\Form\UserType', $user);
                 $form->handleRequest($request);
@@ -73,18 +73,18 @@ class UserController extends Controller
                 }
 
                 return $this->render('user/new.html.twig', array(
-                    'user' => $user,
-                    'role' => $userRole,
+                    //'user' => $user,
+                    //'role' => $userRole,
                     'form' => $form->createView(),
                 ));
-            }else{
+            /*}else{
                 return $this->redirectToRoute('home');
             }
 
 
         }else{
             return $this->redirectToRoute('login');
-        }
+        }*/
     }
 
     /**

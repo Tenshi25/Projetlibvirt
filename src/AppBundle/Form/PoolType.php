@@ -5,6 +5,8 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use AppBundle\Entity\User;
 
 class PoolType extends AbstractType
 {
@@ -13,7 +15,10 @@ class PoolType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name');
+        $builder->add('name')/*->add('user', EntityType::class, [
+            'class' => User::class,
+            'choice_label' => 'login'])*/
+            ;
     }/**
      * {@inheritdoc}
      */

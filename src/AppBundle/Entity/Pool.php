@@ -31,7 +31,7 @@ class Pool
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="Vm", mappedBy="pool")
+     * @ORM\OneToMany(targetEntity="Vm", mappedBy="pool" ,cascade={"persist"})
      */
 
     private $vmsPool;
@@ -40,6 +40,12 @@ class Pool
     {
         $this->vmsPool = new ArrayCollection();
     }
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="pools")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $user;
+
 
     /**
      * Get id.
@@ -74,4 +80,30 @@ class Pool
     {
         return $this->name;
     }
+
+    /**
+     * Get user.
+     *
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set user.
+     *
+     * @param User $user
+     *
+     * @return Pool
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    
 }

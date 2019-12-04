@@ -6,9 +6,11 @@
   <div class="row">
     <div class="col-sm-12">
         <h1>home Page</h1>
+        <p>{{ user.id }}</p>
         <p>{{ user.login }}</p>
         <p>{{ user.password }}</p>
         <p>{{ role }}</p>
+        <p>{{ user.role.name }}</p>
         <table>
         <thead>
             <tr>
@@ -21,6 +23,7 @@
                 <th>Maxram</th>
                 <th>Harddisk</th>
                 <th>Currentharddisk</th>
+                <th>user</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -36,6 +39,7 @@
                 <td>{{ vm.maxRam }}</td>
                 <td>{{ vm.harddisk }}</td>
                 <td>{{ vm.currentharddisk }}</td>
+                <td>{{ vm.user }}</td>
                 <td>
                     <ul>
                         <li>

@@ -54,7 +54,7 @@ class PoolController extends Controller
     {
         if(isset ($_SESSION["role"])){
             $user = $_SESSION["user"];
-            $userRole = $_SESSION["role"];
+            $userRole = $user->getRole()->getName();
             if ($userRole == "Admin" or $userRole == "User" ){
                 $pool = new Pool();
                 $form = $this->createForm('AppBundle\Form\PoolType', $pool);
@@ -62,10 +62,16 @@ class PoolController extends Controller
 
                 if ($form->isSubmitted() && $form->isValid()) {
                     $em = $this->getDoctrine()->getManager();
-                    $em->persist($pool);
+                    $pool->setUser($user);
+                    //$em->persist($pool);
+                    $em->merge($pool);
+                    
+                    dump($user);
+                    dump($pool);
+                    //die;
                     $em->flush();
 
-                    return $this->redirectToRoute('pool_show', array('id' => $pool->getId()));
+                    return $this->redirectToRoute('pool_index');
                 }
 
                 return $this->render('pool/new.html.twig', array(
