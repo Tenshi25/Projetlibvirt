@@ -57,8 +57,24 @@ class User
     {
         $this->pools = new ArrayCollection();
         $this->vms = new ArrayCollection();
+        $this->role = new Role();
     }
     
+    /**
+     * @return Collection|Pool[]
+     */
+    public function getPools(): Collection
+    {
+        return $this->pools;
+    }
+
+    /**
+     * @return Collection|Vm[]
+     */
+    public function getVms(): Collection
+    {
+        return $this->vms;
+    }
 
     /**
      * Get id.

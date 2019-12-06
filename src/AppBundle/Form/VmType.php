@@ -22,7 +22,10 @@ class VmType extends AbstractType
             'choice_label' => 'login'])*/
             ->add('pool', EntityType::class, [
                 'class' => Pool::class,
-                'choice_label' => 'name']);
+                'choice_label' => 'name',
+                ]
+                
+            );
     }/**
      * {@inheritdoc}
      */

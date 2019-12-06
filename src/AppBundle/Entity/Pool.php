@@ -46,6 +46,13 @@ class Pool
      */
     private $user;
 
+    /**
+     * @return Collection|Vm[]
+     */
+    public function getVmsPool(): Collection
+    {
+        return $this->vmsPool;
+    }
 
     /**
      * Get id.

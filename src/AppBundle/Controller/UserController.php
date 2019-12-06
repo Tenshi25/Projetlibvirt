@@ -35,8 +35,11 @@ class UserController extends Controller
 
                 return $this->render('user/index.html.twig', array(
                     'users' => $users,
+                    'user' => $user,
+                    'role' => $userRole,
                 ));
             }else{
+                
                 return $this->redirectToRoute('home');
             }
 
@@ -54,11 +57,11 @@ class UserController extends Controller
      */
     public function newAction(Request $request)
     {
-        //if(isset ($_SESSION["role"])){
-            /*$user = $_SESSION["user"];
-            $userRole = $_SESSION["role"];*/
+        if(isset ($_SESSION["role"])){
+            $user2 = $_SESSION["user"];
+            $userRole = $_SESSION["role"];
 
-            //if ($userRole == "Admin" ){
+            if ($userRole == "Admin" ){
                 $user = new User();
                 $form = $this->createForm('AppBundle\Form\UserType', $user);
                 $form->handleRequest($request);
@@ -73,18 +76,18 @@ class UserController extends Controller
                 }
 
                 return $this->render('user/new.html.twig', array(
-                    //'user' => $user,
-                    //'role' => $userRole,
+                    'user' => $user2,
+                    'role' => $userRole,
                     'form' => $form->createView(),
                 ));
-            /*}else{
+            }else{
                 return $this->redirectToRoute('home');
             }
 
 
         }else{
             return $this->redirectToRoute('login');
-        }*/
+        }
     }
 
     /**
@@ -96,14 +99,16 @@ class UserController extends Controller
     public function showAction(User $user)
     {
         if(isset ($_SESSION["role"])){
-            $user = $_SESSION["user"];
+            $user2 = $_SESSION["user"];
             $userRole = $_SESSION["role"];
 
             if ($userRole == "Admin" ){
                 $deleteForm = $this->createDeleteForm($user);
 
+
+
                 return $this->render('user/show.html.twig', array(
-                    'user' => $user,
+                    'user' => $user2,
                     'role' => $userRole,
                     'delete_form' => $deleteForm->createView(),
                 ));
@@ -126,7 +131,7 @@ class UserController extends Controller
     public function editAction(Request $request, User $user)
     {
         if(isset ($_SESSION["role"])){
-            $user = $_SESSION["user"];
+            $user2 = $_SESSION["user"];
             $userRole = $_SESSION["role"];
             if ($userRole == "Admin" ){
                 $deleteForm = $this->createDeleteForm($user);
@@ -141,7 +146,7 @@ class UserController extends Controller
                 }
 
                 return $this->render('user/edit.html.twig', array(
-                    'user' => $user,
+                    'user' => $user2,
                     'role' => $userRole,
                     'edit_form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),
@@ -165,7 +170,7 @@ class UserController extends Controller
     public function deleteAction(Request $request, User $user)
     {
         if(isset ($_SESSION["role"])){
-            $user = $_SESSION["user"];
+            $user2 = $_SESSION["user"];
             $userRole = $_SESSION["role"];
 
             if ($userRole == "Admin" ){

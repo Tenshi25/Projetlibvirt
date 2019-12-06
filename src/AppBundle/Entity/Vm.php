@@ -95,13 +95,27 @@ class Vm
      */
     private $pool;
 
-
+    /**
+     * Set user.
+     *
+     * @param User $user
+     *
+     * @return Vm
+     */
     public function setUser($user)
     {
         $this->user = $user;
 
         return $this;
     }
+
+     /**
+     * Set pool.
+     *
+     * @param Pool $pool
+     *
+     * @return Vm
+     */
     public function setPool($pool)
     {
         $this->pool = $pool;
@@ -110,7 +124,7 @@ class Vm
     }
 
     /**
-     * Get id.
+     * Get user.
      *
      * @return User
      */
@@ -120,7 +134,7 @@ class Vm
     }
     
     /**
-     * Get id.
+     * Get pool.
      *
      * @return Pool
      */
