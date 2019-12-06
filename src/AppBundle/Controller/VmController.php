@@ -24,7 +24,7 @@ class VmController extends Controller
     {
         if(isset ($_SESSION["role"])){
             $user = $_SESSION["user"];
-            $userRole = $_SESSION["role"];
+            $userRole = $user->getRole()->getName();
 
             if ($userRole == "Admin" or $userRole == "User" ){
                 $em = $this->getDoctrine()->getManager();
@@ -49,7 +49,7 @@ class VmController extends Controller
     {
         if(isset ($_SESSION["role"])){
             $user = $_SESSION["user"];
-            $userRole = $_SESSION["role"];
+            $userRole = $user->getRole()->getName();
 
             if ($userRole == "Admin" or $userRole == "User" ){
                 $vm = new Vm();
@@ -58,10 +58,19 @@ class VmController extends Controller
 
                 if ($form->isSubmitted() && $form->isValid()) {
                     $em = $this->getDoctrine()->getManager();
-                    $em->persist($vm);
+                    //$em->persist($vm);
+                    dump($user);
+                    $vm->setUser($user);
+                    $vm->setActive(false);
+                    dump($vm->getUser());
+                    dump($vm);
+                    $em->merge($vm);
+                    //$pool->setUser($user);
+                    
+                    //die();
                     $em->flush();
 
-                    return $this->redirectToRoute('vm_show', array('id' => $vm->getId()));
+                    return $this->redirectToRoute('vm_index');
                 }
 
                 return $this->render('vm/new.html.twig', array(
@@ -83,7 +92,7 @@ class VmController extends Controller
     {
         if(isset ($_SESSION["role"])){
             $user = $_SESSION["user"];
-            $userRole = $_SESSION["role"];
+            $userRole = $user->getRole()->getName();
 
             if ($userRole == "Admin" or $userRole == "User" ){
                 $deleteForm = $this->createDeleteForm($vm);
@@ -107,7 +116,7 @@ class VmController extends Controller
     {
         if(isset ($_SESSION["role"])){
             $user = $_SESSION["user"];
-            $userRole = $_SESSION["role"];
+            $userRole = $user->getRole()->getName();
 
             if ($userRole == "Admin" or $userRole == "User" ){
                 $deleteForm = $this->createDeleteForm($vm);
@@ -140,7 +149,7 @@ class VmController extends Controller
     {
         if(isset ($_SESSION["role"])){
             $user = $_SESSION["user"];
-            $userRole = $_SESSION["role"];
+            $userRole = $user->getRole()->getName();
   
             if ($userRole == "Admin" or $userRole == "User" ){
                 $form = $this->createDeleteForm($vm);

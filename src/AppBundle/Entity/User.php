@@ -44,15 +44,37 @@ class User
     private $role;
 
     /**
-     * @ORM\OneToMany(targetEntity="Vm", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Vm", mappedBy="user", cascade={"remove"})
      */
     private $vms;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Pool", mappedBy="user", cascade={"remove"})
+     */
+    private $pools;
+
     public function __construct()
     {
+        $this->pools = new ArrayCollection();
         $this->vms = new ArrayCollection();
+        $this->role = new Role();
     }
     
+    /**
+     * @return Collection|Pool[]
+     */
+    public function getPools(): Collection
+    {
+        return $this->pools;
+    }
+
+    /**
+     * @return Collection|Vm[]
+     */
+    public function getVms(): Collection
+    {
+        return $this->vms;
+    }
 
     /**
      * Get id.
@@ -129,7 +151,7 @@ class User
     /**
      * Get role.
      *
-     * @return string
+     * @return Role
      */
     public function getRole()
     {

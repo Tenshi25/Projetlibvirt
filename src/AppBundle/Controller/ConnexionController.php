@@ -40,7 +40,7 @@ class ConnexionController extends Controller
             ->setAction($this->generateUrl('login'))
             ->setMethod('POST')
             ->add('login', TextType::class)
-            ->add('password', TextType::class)
+            ->add('password', PasswordType::class)
             ->add('Se connecter', SubmitType::class, ['label' => 'Create Connexion'])
             ->getForm();
 

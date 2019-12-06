@@ -36,23 +36,23 @@ class Vm
     private $os;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="nbcpu", type="string", length=255)
+     * @ORM\Column(name="nbcpu", type="integer")
      */
     private $nbcpu;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="currentCpu", type="string", length=255)
+     * @ORM\Column(name="currentCpu", type="integer", nullable=true, options={"default":0})
      */
     private $currentCpu;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="currentRam", type="integer")
+     * @ORM\Column(name="currentRam", type="integer", nullable=true, options={"default":0})
      */
     private $currentRam;
 
@@ -73,9 +73,15 @@ class Vm
     /**
      * @var int
      *
-     * @ORM\Column(name="currentharddisk", type="integer")
+     * @ORM\Column(name="currentharddisk", type="integer", nullable=true, options={"default":0})
      */
     private $currentharddisk;
+    
+    /**
+     * @var boolean
+     * @ORM\Column(name="active", type="boolean", nullable=true, options={"default":true})
+     */
+    private $active;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="vms")
@@ -89,12 +95,27 @@ class Vm
      */
     private $pool;
 
+    /**
+     * Set user.
+     *
+     * @param User $user
+     *
+     * @return Vm
+     */
     public function setUser($user)
     {
         $this->user = $user;
 
         return $this;
     }
+
+     /**
+     * Set pool.
+     *
+     * @param Pool $pool
+     *
+     * @return Vm
+     */
     public function setPool($pool)
     {
         $this->pool = $pool;
@@ -103,7 +124,7 @@ class Vm
     }
 
     /**
-     * Get id.
+     * Get user.
      *
      * @return User
      */
@@ -113,7 +134,7 @@ class Vm
     }
     
     /**
-     * Get id.
+     * Get pool.
      *
      * @return Pool
      */
